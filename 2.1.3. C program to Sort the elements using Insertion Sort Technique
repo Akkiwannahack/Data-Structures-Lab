@@ -1,0 +1,45 @@
+#include <stdio.h>
+// Function to implement Insertion Sort
+void insertionSort(int a[], int n) {
+    int i, j, temp;
+    for (i = 1; i < n; i++) {
+        temp = a[i]; // Store current element
+        j = i - 1;
+        
+        // Shift elements to the right until correct position is found
+        while (j >= 0 && a[j] > temp) {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = temp; // Insert the element at correct position
+    }
+}
+
+void main() {
+    int a[20], i, n;
+
+    // Taking input for the array size
+    printf("Enter value of n : ");
+    scanf("%d", &n);
+
+    // Taking input for array elements
+    for (i = 0; i < n; i++) {
+        printf("Enter element for a[%d] : ", i);
+        scanf("%d", &a[i]);
+    }
+
+    // Display elements before sorting
+    printf("Before sorting the elements in the array are\n");
+    for (i = 0; i < n; i++) {
+        printf("Value of a[%d] = %d\n", i, a[i]);
+    }
+
+    // Sorting the array using Insertion Sort
+    insertionSort(a, n);
+
+    // Display elements after sorting
+    printf("After sorting the elements in the array are\n");
+    for (i = 0; i < n; i++) {
+        printf("Value of a[%d] = %d\n", i, a[i]);
+    }
+}
