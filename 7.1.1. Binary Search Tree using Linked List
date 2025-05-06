@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+  int key;
+  struct node *left, *right;
+};
+
+// Creation
+struct node *newNode(int item) {
+  struct node *temp = (struct node *)malloc(sizeof(struct node));
+  temp->key = item;
+  temp->left = temp->right = NULL;
+  return temp;
+}
+
+// Inorder Traversal using recursion
+void inorder(struct node *root) {
+  if (root != NULL) {
+    // Traverse left
+    inorder(root->left);
+    // Traverse root
+    printf("%d ", root->key);
+    // Traverse right
+    inorder(root->right);
+  }
+}
+
+void preorder(struct node *root) {
+  if (root != NULL) {
+    // Traverse left
+     printf("%d ", root->key);
+    preorder(root->left);
+    // Traverse right
+    preorder(root->right);
+  }
+}
+// Find the inorder successor
+struct node *minValueNode(struct node *node) {
+  struct node *current = node;
+  // Find the leftmost leaf
+  while (current && current->left != NULL)
+    current = current->left;
+  return current;
+}
+
+// Insert a node in BST
+struct node *insert(struct node *node, int key) {
+  // write your code here to perform insertion operation
+// Insert a node in BST
+
+    // If the tree is empty, return a new node
+    if (node == NULL)
+        return newNode(key);
+
+    // Otherwise, recur down the tree
+    if (key < node->key)
+        node->left = insert(node->left, key);  // Insert in left subtree
+    else if (key > node->key)
+        node->right = insert(node->right, key);  // Insert in right subtree
+
+    // Return the (unchanged) node pointer
+    return node;
+
+
+}
+
+// Deleting a node
+struct node *deleteNode(struct node *root, int key) {
+
+  // write your code here to perform deletion operation
+// Deleting a node
+
+    // Base case: If the tree is empty
+    if (root == NULL)
+        return root;
+
+    // Otherwise, recur down the tree
+    if (key < root->key)
+        root->left = deleteNode(root->left, key);  // Key is smaller, go left
+    else if (key > root->key)
+        root->right = deleteNode(root->right, key);  // Key is larger, go right
+    else {
+        // Node to be deleted found
+
+        // Case 1: Node has only one child or no child
+        if (root->left == NULL) {
+            struct node *temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct node *temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Case 2: Node has two children, get the inorder successor (smallest in the right subtree)
+        struct node *temp = minValueNode(root->right);
+
+        // Copy the inorder successor's content to this node
+        root->key = temp->key;
+
+        // Delete the inorder successor
+        root->right = deleteNode(root->right, temp->key);
+    }
+    return root;
+
+
+
+
+}
+// Driver code
+int main() {
+  struct node *root = NULL;
+  int n,data;
+  printf("Enter how many nodes you want to insert in BST :");
+  scanf("%d",&n);
+  for( int i =0 ; i < n ; i++){
+      printf("Enter the value: ");
+      scanf("%d", &data);
+      root = insert(root, data);
+  }
+
+  printf("Inorder traversal(Always gives ascending order): ");
+  inorder(root);
+  printf("\nPreorder traversal: ");
+  preorder(root);
+  printf("\nEnter the data to delete: ");
+  scanf("%d",&data);
+
+  printf("After deleting %d\n",data);
+  root = deleteNode(root, data);
+  printf("Inorder traversal: ");
+  inorder(root);
+  printf("\nPreorder traversal: ");
+  preorder(root);
+}
